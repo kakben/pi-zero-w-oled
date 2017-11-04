@@ -61,7 +61,7 @@ draw = ImageDraw.Draw(image)
 
 # Set initial parameters
 ballx, bally = 0, 0
-vx, vy = 1, 1
+vx, vy = 5, 5
 size = 2
 
 FPS = 30.0
@@ -81,15 +81,15 @@ while True:
 	# Check input
 	if GPIO.input(A_pin):
 		if A_pin_down:
-			vx, vy = random.randint(-10,10), random.randint(-10,10)
+			vx, vy = random.randint(-128,128), random.randint(-64,64)
 			A_pin_down = False
-		else:
-			A_pin_down = True
+	else:
+		A_pin_down = True
 
 	dt = time.time() - last
 	if dt > SPF:
 		last = time.time()
-		
+
 		# Update position
 		ballx += vx*dt
 		bally += vy*dt
@@ -101,30 +101,26 @@ while True:
 			vx = -vx
 		if bally < 0:
 			bally = -bally
-				vy = -vy
-			elif bally >= height-1:
-				bally = bally - 2*(bally-height)
+			vy = -vy
+		elif bally >= height-1:
+			bally = bally - 2*(bally-height)
 			vy = -vy
 
 		trace.append([ballx,bally])
 		if len(trace) > 6:
 			trace = trace[1:]
 
-			# Clear image buffer by drawing a black filled box.
-			draw.rectangle((0,0,width,height), outline=0, fill=0)
-			draw.rectangle((0,0,0,0), outline=0, fill=1)
-			draw.rectangle((0,height-1,0,height-1), outline=0, fill=1)
-			draw.rectangle((width-1,0,width-1,0), outline=0, fill=1)
-			draw.rectangle((width-1,height-1,width-1,height-1), outline=0, fill=1)
+		# Clear image buffer by drawing a white filled box.
+		draw.rectangle((0,0,width,height), outline=1, fill=1)
 
-			# Draw squares
-			draw.rectangle([trace[-1][0]-size,trace[-1][1]-size,trace[-1][0]+size,trace[-1][1]+size], outline=0, fill=1)
-			for t in trace[:-1]:
-			draw.rectangle(t+t, outline=0, fill=1)
+		# Draw squares
+		draw.rectangle([trace[-1][0]-size,trace[-1][1]-size,trace[-1][0]+size,trace[-1][1]+size], outline=0, fill=0)
+		for t in trace[:-1]:
+			draw.rectangle(t+t, outline=0, fill=0)
 
-			# Draw the image buffer.
-			disp.image(image)
-			disp.display()
+		# Draw the image buffer.
+		disp.image(image)
+		disp.display()
 
 		fpscount += 1
 		if time.time() - fpstimer > 1:
