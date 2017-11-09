@@ -135,14 +135,20 @@ class Histogram:
 				self.bin_heights = [0]*self.bins
 				self.bin_heights[self.bins/2] = self.height
 			else:
-				bin_data_width = diff / float(self.bins)
-				bin_counts = [0]*self.bins
-				for val in values:
-					i = int((val - dmin) / bin_data_width)
-					bin_counts[i] += 1
-				maxcount = float(max(bin_counts))
-				px_per_count = self.height / maxcount
-				self.bin_heights = [int(count * px_per_count) for count in bin_counts]
+				try:
+					bin_data_width = diff / float(self.bins)
+					bin_counts = [0]*self.bins
+					for val in values:
+						i = int((val - dmin) / bin_data_width)
+						bin_counts[i] += 1
+					maxcount = float(max(bin_counts))
+					px_per_count = self.height / maxcount
+					self.bin_heights = [int(count * px_per_count) for count in bin_counts]
+				except IndexError:
+					print(bin_data_width)
+					print(bin_counts)
+					print(values)
+					print(dmin)
 
 	def __draw_bar(self, bar_nr):
 		x = self.x + self.bin_shift + self.bin_width*bar_nr
