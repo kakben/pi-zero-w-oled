@@ -63,8 +63,61 @@ font = ImageFont.load_default()
 # Create drawing object.
 draw = ImageDraw.Draw(image)
 
+'''
+WINDOW MANAGEMENT
+'''
+
+class Window:
+	def __init__(self, x, y, width, height):
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+		self.subwindows = None
+		self.subwins_vertical = None
+		self.content = None
+
+	def create_subwindows(self, border_arr, vertical=True):
+		if self.content is not None:
+			raise ValueError("Warning: You are creating subwindows but already have content!")
+		if vertical:
+			if max(border_arr) >= self.width-1:
+				raise ValueError("Cannot create subwindows outside of current Window!")
+			self.subwins_vertical = True
+			last = self.y
+			self.subwindows = []
+			for step in border_arr + [self.height]:
+				self.subwindows.apped(Window(self.x, last, self.x+self.width, self.y+step))
+				last = step
+		else:
+			if max(border_arr) >= self.height-1:
+				raise ValueError("Cannot create subwindows outside of current Window!")
+			self.subwins_vertical = False
+			last = self.x
+			self.subwindows = []
+			for step in border_arr + [self.width]:
+				self.subwindows.apped(Window(last, self.y, self.x+step, self.y+self.height))
+				last = step
+
+	def add_content(self, content):
+		if self.subwindows is not None:
+			raise ValueError("Warning: You are adding content but already have subwindows!")
+		self.content = content
+
+	def draw(self):
+		if self.content is None and self.subwindows is None:
+			draw.rectangle((self.x,self.y,self.width,self.height), outline=0, fill=1)
+		elif self.subwindows is not None:
+			for subwin in self.subwindows:
+				subwin.draw()
+		else:
+			self.content.draw()
+
+# Create root Window
+rootwin = Window(0, 0, 128, 64)
+
 # Clear initially
-draw.rectangle((0,0,width,height), outline=0, fill=0)
+rootwin.draw()
 disp.image(image)
 disp.display()
 
