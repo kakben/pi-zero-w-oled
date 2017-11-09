@@ -151,6 +151,7 @@ class Histogram:
 		x = self.x + self.bin_shift + self.bin_width*bar_nr
 		height = self.bin_heights[bar_nr]
 		y = self.y + self.height - height
+		print("Bar:", x, y, self.bin_width, height)
 		draw.rectangle((x, y, self.bin_width, height), outline=0, fill=1)
 
 	def draw(self):
