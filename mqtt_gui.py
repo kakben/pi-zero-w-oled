@@ -148,18 +148,18 @@ class Histogram:
 		print(self.bin_heights)
 
 	def __draw_bar(self, bar_nr):
-		x = self.x + self.bin_shift + self.bin_width*bar_nr
-		height = self.bin_heights[bar_nr]
-		y = self.y + self.height-1 - height
-		print("Bar:", x, y, self.bin_width, height)
-		draw.rectangle((x, y, self.bin_width, height), outline=0, fill=1)
+		x1 = self.x + self.bin_shift + self.bin_width*bar_nr
+		y1 = self.y + self.height-1
+		x2 = x1 + self.bin_width-1
+		y2 = y1 - self.bin_heights[bar_nr]
+		print("Bar:", x1, y1, x2, y2)
+		draw.rectangle((x1, y1, x2, y2), outline=0, fill=1)
 
 	def draw(self):
 		print("We are drawing!")
-		draw.rectangle((self.x,self.y,self.width,self.height), outline=0, fill=0)
-		#for i in range(self.bins):
-			#self.__draw_bar(i)
-		self.__draw_bar(0)
+		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
+		for i in range(self.bins):
+			self.__draw_bar(i)
 
 # Create root Window
 rootwin = Window(0, 0, 128, 64)
