@@ -99,10 +99,10 @@ class Window:
 				self.subwindows.apped(Window(last, self.y, self.x+step, self.y+self.height))
 				last = step
 
-	def add_content(self, content):
+	def add_histogram(self, values=[], bins=10):
 		if self.subwindows is not None:
 			raise ValueError("Warning: You are adding content but already have subwindows!")
-		self.content = content
+		self.content = Histogram(self.x, self.y, self.width, self.height, values, bins)
 
 	def draw(self):
 		if self.content is None and self.subwindows is None:
@@ -113,8 +113,51 @@ class Window:
 		else:
 			self.content.draw()
 
+class Histogram:
+	def __init__(self, x, y, width, height, values, bins=10):
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+		self.bins = bins
+		self.bin_width = width / bins
+		self.bin_shift = (width % bins) / 2
+		self.set_values(values)
+
+	def set_values(self, values):
+		self.values = values
+		if len(values) == 0:
+			self.bin_heights = [0]*self.bins
+		else:
+			dmin, dmax = min(values), max(values)
+			diff = dmax-dmin
+			if diff == 0:
+				self.bin_heights = [0]*self.bins
+				self.bin_heights[self.bins/2] = self.height
+			else:
+				bin_data_width = diff / float(self.bins)
+				bin_counts = [0]*self.bins
+				for val in values:
+					i = int((val - dmin) / bin_data_width)
+					bin_counts[i] += 1
+				maxcount = float(max(bin_counts))
+				px_per_count = self.height / maxcount
+				self.bin_heights = [int(count * px_per_count) for count in bin_counts]
+
+	def __draw_bar(self, bar_nr):
+		x = self.x + self.bin_shift + self.bin_width*bar_nr
+		height = self.bin_heights[i]
+		y = self.y + self.height - height
+		draw.rectangle((x, y, self.bin_width, height), outline=0, fill=1)
+
+	def draw(self):
+		draw.rectangle((self.x,self.y,self.width,self.height), outline=0, fill=0)
+		for i in range(self.bins):
+			self.__draw_bar(i)
+
 # Create root Window
 rootwin = Window(0, 0, 128, 64)
+rootwin.add_histogram()
 
 # Clear initially
 rootwin.draw()
@@ -126,12 +169,6 @@ CALLBACKS
 '''
 
 def show_message(msg):
-	# Check input
-	if GPIO.input(A_pin):
-		pass
-	else:
-		pass
-
 	# Clear image buffer by drawing a white filled box.
 	draw.rectangle((0,0,width,height), outline=0, fill=0)
 
@@ -142,6 +179,12 @@ def show_message(msg):
 	# Draw the image buffer.
 	disp.image(image)
 	disp.display()
+
+datalog = []
+def handle_data(data):
+	datalog.append(float(data.split()[0]))
+	rootwin.content.set_values(datalog)
+	rootwin.draw()
 
 '''
 MQTT STUFF
@@ -160,16 +203,8 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-	try:
-		mess = []
-		for i in range(0, (len(msg.topic)//20)+1):
-			mess.append( [(0,i*10), msg.topic[i*20:i*20+20]] )
-		pad = len(mess)
-		for j in range(0, (len(msg.payload)//20)+1):
-			mess.append( [(0,(pad+j)*10), msg.payload[j*20:j*20+20]] )
-		show_message(mess)
-	except UnicodeDecodeError:
-		show_message([ [(0,0),"Error"] ])
+	if msg.topic == "wits/project/coffee/coffee1":
+		handle_data(msg.payload)
 
 client = mqtt.Client()
 client.on_connect = on_connect
