@@ -145,18 +145,15 @@ class Histogram:
 				maxcount = float(max(bin_counts))
 				px_per_count = (self.height-1) / maxcount
 				self.bin_heights = [int(count * px_per_count) for count in bin_counts]
-		print(self.bin_heights)
 
 	def __draw_bar(self, bar_nr):
 		x1 = self.x + self.bin_shift + self.bin_width*bar_nr
 		y1 = self.y + self.height-1
 		x2 = x1 + self.bin_width-1
 		y2 = y1 - self.bin_heights[bar_nr]
-		print("Bar:", x1, y1, x2, y2)
 		draw.rectangle((x1, y1, x2, y2), outline=0, fill=1)
 
 	def draw(self):
-		print("We are drawing!")
 		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
 		for i in range(self.bins):
 			self.__draw_bar(i)
@@ -186,10 +183,10 @@ def show_message(msg):
 	disp.image(image)
 	disp.display()
 
-datalog = []
+import random
+datalog = [random.random() for i in range(1000)]
 def handle_data(data):
-	print("Data:", data)
-	datalog.append(float(data.split()[0]))
+	#datalog.append(float(data.split()[0]))
 	rootwin.content.set_values(datalog)
 	rootwin.draw()
 	disp.image(image)
