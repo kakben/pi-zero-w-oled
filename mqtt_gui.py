@@ -143,14 +143,14 @@ class Histogram:
 						i -= 1
 					bin_counts[i] += 1
 				maxcount = float(max(bin_counts))
-				px_per_count = self.height / maxcount
+				px_per_count = (self.height-1) / maxcount
 				self.bin_heights = [int(count * px_per_count) for count in bin_counts]
 		print(self.bin_heights)
 
 	def __draw_bar(self, bar_nr):
 		x = self.x + self.bin_shift + self.bin_width*bar_nr
 		height = self.bin_heights[bar_nr]
-		y = self.y + self.height - height
+		y = self.y + self.height-1 - height
 		print("Bar:", x, y, self.bin_width, height)
 		draw.rectangle((x, y, self.bin_width, height), outline=0, fill=1)
 
