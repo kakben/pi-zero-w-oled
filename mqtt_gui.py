@@ -191,6 +191,8 @@ def handle_data(data):
 	datalog.append(float(data.split()[0]))
 	rootwin.content.set_values(datalog)
 	rootwin.draw()
+	disp.image(image)
+	disp.display()
 
 '''
 MQTT STUFF
