@@ -183,8 +183,8 @@ def show_message(msg):
 	disp.image(image)
 	disp.display()
 
-import numpy.random.normal as norm
-datalog = norm(size=1000)
+import random
+datalog = [random.normalvariate(0,1) for i in range(1000)]
 def handle_data(data):
 	#datalog.append(float(data.split()[0]))
 	rootwin.content.set_values(datalog)
