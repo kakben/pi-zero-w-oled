@@ -157,8 +157,9 @@ class Histogram:
 	def draw(self):
 		print("We are drawing!")
 		draw.rectangle((self.x,self.y,self.width,self.height), outline=0, fill=0)
-		for i in range(self.bins):
-			self.__draw_bar(i)
+		#for i in range(self.bins):
+			#self.__draw_bar(i)
+		self.__draw_bar(0)
 
 # Create root Window
 rootwin = Window(0, 0, 128, 64)
