@@ -191,7 +191,7 @@ datalog0 = []
 datalog1 = []
 def handle_data(data):
 	print("Data:", data)
-	data = list(map(lambda v: float(v), data.split()))
+	data = list(map(lambda v: float(v), data.split()[:6]))
 	datalog0.append(data[0])
 	datalog1.append(data[2])
 	rootwin.subwindows[0].content.set_values(datalog0)
