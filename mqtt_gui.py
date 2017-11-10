@@ -190,8 +190,8 @@ def show_message(msg):
 datalog0 = []
 datalog1 = []
 def handle_data(data):
-	data = list(map(lambda v: float(v), data.split()))
 	print("Data:", data)
+	data = list(map(lambda v: float(v), data.split()))
 	datalog0.append(data[0])
 	datalog1.append(data[2])
 	rootwin.subwindows[0].content.set_values(datalog0)
