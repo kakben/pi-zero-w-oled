@@ -87,7 +87,7 @@ class Window:
 			last = self.y
 			self.subwindows = []
 			for step in border_arr + [self.height]:
-				self.subwindows.apped(Window(self.x, last, self.x+self.width, self.y+step))
+				self.subwindows.append(Window(self.x, last, self.x+self.width, self.y+step))
 				last = step
 		else:
 			if max(border_arr) >= self.height-1:
