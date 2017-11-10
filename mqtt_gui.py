@@ -160,7 +160,9 @@ class Histogram:
 
 # Create root Window
 rootwin = Window(0, 0, 128, 64)
-rootwin.add_histogram(bins=20)
+rootwin.create_subwindows([32])
+rootwin.subwindows[0].add_histogram(bins=20)
+rootwin.subwindows[1].add_histogram(bins=20)
 
 # Clear initially
 rootwin.draw()
@@ -185,11 +187,15 @@ def show_message(msg):
 
 #import random
 #datalog = [random.normalvariate(0,1) for i in range(1000)]
-datalog = []
+datalog0 = []
+datalog1 = []
 def handle_data(data):
+	data = list(map(lambda v: float(v), data.split()))
 	print("Data:", data)
-	datalog.append(float(data.split()[0]))
-	rootwin.content.set_values(datalog)
+	datalog0.append(data[0])
+	datalog1.append(data[2])
+	rootwin.subwindows[0].content.set_values(datalog0)
+	rootwin.subwindows[1].content.set_values(datalog1)
 	rootwin.draw()
 	disp.image(image)
 	disp.display()
