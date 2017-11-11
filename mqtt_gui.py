@@ -162,7 +162,10 @@ class Histogram:
 rootwin = Window(0, 0, 128, 64)
 rootwin.create_subwindows([32])
 rootwin.subwindows[0].add_histogram(bins=20)
-rootwin.subwindows[1].add_histogram(bins=20)
+lower_win = rootwin.subwindows[1]
+lower_win.create_subwindows([32], vertical=False)
+lower_win.subwindows[0].add_histogram(bins=20)
+lower_win.subwindows[1].add_histogram(bins=20)
 
 # Clear initially
 rootwin.draw()
@@ -196,7 +199,8 @@ def handle_data(data):
 	datalog0.append(float(data["a"]))
 	datalog1.append(float(data["b"]))
 	rootwin.subwindows[0].content.set_values(datalog0)
-	rootwin.subwindows[1].content.set_values(datalog1)
+	lower_win.subwindows[0].content.set_values(datalog0)
+	lower_win.subwindows[1].content.set_values(datalog0)
 	rootwin.draw()
 	disp.image(image)
 	disp.display()
