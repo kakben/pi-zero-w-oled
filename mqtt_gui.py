@@ -189,11 +189,12 @@ def show_message(msg):
 #datalog = [random.normalvariate(0,1) for i in range(1000)]
 datalog0 = []
 datalog1 = []
+import json
 def handle_data(data):
 	print("Data:", data)
-	data = list(map(lambda v: float(v), data.split()[:6]))
-	datalog0.append(data[0])
-	datalog1.append(data[2])
+	data = json.loads(data)
+	datalog0.append(float(data["data"]["temp"]["value"]))
+	datalog1.append(float(data["data"]["light"]["value"]))
 	rootwin.subwindows[0].content.set_values(datalog0)
 	rootwin.subwindows[1].content.set_values(datalog1)
 	rootwin.draw()
@@ -213,11 +214,11 @@ def on_connect(client, userdata, flags, rc):
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
 #	client.subscribe("$SYS/#")
-	client.subscribe("wits/project/coffee/coffee1")
+	client.subscribe("BCDS/XDK/single/20:19:AB:F4:00:52/out/stream")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-	if msg.topic == "wits/project/coffee/coffee1":
+	if msg.topic == "BCDS/XDK/single/20:19:AB:F4:00:52/out/stream":
 		handle_data(msg.payload)
 
 client = mqtt.Client()
