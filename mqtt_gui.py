@@ -167,6 +167,8 @@ lower_win.create_subwindows([32], vertical=False)
 lower_win.subwindows[0].add_histogram(bins=20)
 lower_win.subwindows[1].add_histogram(bins=20)
 
+print lower_win.x, lower_win.y, lower_win.width, lower_win.height
+
 # Clear initially
 rootwin.draw()
 disp.image(image)
