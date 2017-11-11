@@ -246,7 +246,7 @@ def handle_data(data):
 	datalog.append(data)
 	A = [d["a"] for d in datalog]
 	T = [d["t"] for d in datalog]
-	rootwin.subwindows[0].content.set_values(A, T)
+	rootwin.subwindows[0].content.set_values(T[-64:], A[-64:])
 	B = [d["b"] for d in datalog]
 	lower_win.subwindows[0].content.set_values(A)
 	lower_win.subwindows[1].content.set_values(B)
