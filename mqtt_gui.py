@@ -84,19 +84,19 @@ class Window:
 			if max(border_arr) >= self.width-1:
 				raise ValueError("Cannot create subwindows outside of current Window!")
 			self.subwins_vertical = True
-			last = self.y
+			last = 0
 			self.subwindows = []
 			for step in border_arr + [self.height]:
-				self.subwindows.append(Window(self.x, last, self.x+self.width, self.y+step))
+				self.subwindows.append(Window(self.x, self.y+last, self.width, step-last))
 				last = step
 		else:
 			if max(border_arr) >= self.height-1:
 				raise ValueError("Cannot create subwindows outside of current Window!")
 			self.subwins_vertical = False
-			last = self.x
+			last = 0
 			self.subwindows = []
 			for step in border_arr + [self.width]:
-				self.subwindows.append(Window(last, self.y, self.x+step, self.y+self.height))
+				self.subwindows.append(Window(self.x+last, self.y, step-last, self.height))
 				last = step
 
 	def add_histogram(self, values=[], bins=10):
