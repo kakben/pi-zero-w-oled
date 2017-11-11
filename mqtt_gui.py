@@ -81,7 +81,7 @@ class Window:
 		if self.content is not None:
 			raise ValueError("Warning: You are creating subwindows but already have content!")
 		if vertical:
-			if max(border_arr) >= self.width-1:
+			if max(border_arr) >= self.height-1:
 				raise ValueError("Cannot create subwindows outside of current Window!")
 			self.subwins_vertical = True
 			last = 0
@@ -90,7 +90,7 @@ class Window:
 				self.subwindows.append(Window(self.x, self.y+last, self.width, step-last))
 				last = step
 		else:
-			if max(border_arr) >= self.height-1:
+			if max(border_arr) >= self.width-1:
 				raise ValueError("Cannot create subwindows outside of current Window!")
 			self.subwins_vertical = False
 			last = 0
