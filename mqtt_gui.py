@@ -131,10 +131,11 @@ class Lineplot:
 			raise ValueError("X and Y must be of equal length!")
 		self.xvals = xvals
 		self.yvals = yvals
-		self.xmin = min(xvals)
-		self.ymin = min(yvals)
-		self.xspan = float(max(xvals) - self.xmin)
-		self.yspan = float(max(yvals) - self.ymin)
+		if len(xvals) > 0:
+			self.xmin = min(xvals)
+			self.ymin = min(yvals)
+			self.xspan = float(max(xvals) - self.xmin)
+			self.yspan = float(max(yvals) - self.ymin)
 
 	def __get_px_coord(self, xval, yval):
 		px_x = self.x + self.width * (xval - self.xmin) / self.xspan
@@ -151,9 +152,11 @@ class Lineplot:
 			lastpair = None
 			for pair in zip(self.xvals, self.yvals):
 				if lastpair is None:
-					lastpair = pair
+					lastpair = self.__get_px_coord(*pair)
 				else:
-					draw.line(lastpair+pair, fill=1)
+					currentpair = self.__get_px_coord(*pair)
+					draw.line(lastpair+currentpair, fill=1)
+					lastpair = currentpair
 
 class Histogram:
 	def __init__(self, x, y, width, height, values, bins=10):
