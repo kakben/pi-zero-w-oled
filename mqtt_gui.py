@@ -115,6 +115,8 @@ class Window:
 
 class Histogram:
 	def __init__(self, x, y, width, height, values, bins=10):
+		if width < bins:
+			raise ValueError("Reduce number of bins when creating a small histogram!")
 		self.x = x
 		self.y = y
 		self.width = width
@@ -151,7 +153,7 @@ class Histogram:
 		y1 = self.y + self.height-1
 		x2 = x1 + self.bin_width-1
 		y2 = y1 - self.bin_heights[bar_nr]
-		draw.rectangle((x1, y1, x2, y2), outline=0, fill=1)
+		draw.rectangle((x1, y1, x2, y2), outline=1, fill=1)
 
 	def draw(self):
 		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
@@ -200,7 +202,7 @@ def handle_data(data):
 	data = json.loads(data)
 	datalog0.append(float(data["a"]))
 	datalog1.append(float(data["b"]))
-	rootwin.subwindows[0].content.set_values(datalog0)
+	rootwin.subwindows[0].content.set_values(datalog1)
 	lower_win.subwindows[0].content.set_values(datalog0)
 	lower_win.subwindows[1].content.set_values(datalog0)
 	rootwin.draw()
