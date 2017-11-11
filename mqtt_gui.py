@@ -96,7 +96,7 @@ class Window:
 			last = self.x
 			self.subwindows = []
 			for step in border_arr + [self.width]:
-				self.subwindows.apped(Window(last, self.y, self.x+step, self.y+self.height))
+				self.subwindows.append(Window(last, self.y, self.x+step, self.y+self.height))
 				last = step
 
 	def add_histogram(self, values=[], bins=10):
