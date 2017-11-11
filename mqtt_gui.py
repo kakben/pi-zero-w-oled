@@ -104,6 +104,11 @@ class Window:
 			raise ValueError("Warning: You are adding content but already have subwindows!")
 		self.content = Histogram(self.x, self.y, self.width, self.height, values, bins)
 
+	def add_lineplot(self, xvals=[], yvals=[]):
+		if self.subwindows is not None:
+			raise ValueError("Warning: You are adding content but already have subwindows!")
+		self.content = Lineplot(self.x, self.y, self.width, self.height, xvals, yvals)
+
 	def draw(self):
 		if self.content is None and self.subwindows is None:
 			draw.rectangle((self.x,self.y,self.width,self.height), outline=0, fill=1)
@@ -112,6 +117,43 @@ class Window:
 				subwin.draw()
 		else:
 			self.content.draw()
+
+class Lineplot:
+	def __init__(self, x, y, width, height, xvals, yvals):
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+		self.set_values(xvals, yvals)
+
+	def set_values(self, xvals, yvals):
+		if len(xvals) != len(yvals):
+			raise ValueError("X and Y must be of equal length!")
+		self.xvals = xvals
+		self.yvals = yvals
+		self.xmin = min(xvals)
+		self.ymin = min(yvals)
+		self.xspan = float(max(xvals) - self.xmin)
+		self.yspan = float(max(yvals) - self.ymin)
+
+	def __get_px_coord(self, xval, yval):
+		px_x = self.x + self.width * (xval - self.xmin) / self.xspan
+		px_y = self.y + self.height * (1 - (yval - self.ymin) / self.yspan)
+		return px_x, px_y
+
+	def draw(self):
+		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
+		if len(self.xvals) == 0:
+			pass
+		elif len(self.xvals) == 1:
+			draw.line((self.x, self.y+self.height/2, self.x+self.width, self.y+self.height/2), fill=1)
+		else:
+			lastpair = None
+			for pair in zip(self.xvals, self.yvals):
+				if lastpair is None:
+					lastpair = pair
+				else:
+					draw.line(lastpair+pair, fill=1)
 
 class Histogram:
 	def __init__(self, x, y, width, height, values, bins=10):
@@ -163,9 +205,9 @@ class Histogram:
 # Create root Window
 rootwin = Window(0, 0, 128, 64)
 rootwin.create_subwindows([32])
-rootwin.subwindows[0].add_histogram(bins=20)
+rootwin.subwindows[0].add_lineplot()
 lower_win = rootwin.subwindows[1]
-lower_win.create_subwindows([32], vertical=False)
+lower_win.create_subwindows([64], vertical=False)
 lower_win.subwindows[0].add_histogram(bins=20)
 lower_win.subwindows[1].add_histogram(bins=20)
 
@@ -192,19 +234,19 @@ def show_message(msg):
 	disp.image(image)
 	disp.display()
 
-#import random
-#datalog = [random.normalvariate(0,1) for i in range(1000)]
-datalog0 = []
-datalog1 = []
+
 import json
+datalog = []
 def handle_data(data):
 	print("Data:", data)
 	data = json.loads(data)
-	datalog0.append(float(data["a"]))
-	datalog1.append(float(data["b"]))
-	rootwin.subwindows[0].content.set_values(datalog1)
-	lower_win.subwindows[0].content.set_values(datalog0)
-	lower_win.subwindows[1].content.set_values(datalog0)
+	datalog.append(data)
+	A = [d["a"] for d in datalog]
+	T = [d["t"] for d in datalog]
+	rootwin.subwindows[0].content.set_values(A, T)
+	B = [d["b"] for d in datalog]
+	lower_win.subwindows[0].content.set_values(A)
+	lower_win.subwindows[1].content.set_values(B)
 	rootwin.draw()
 	disp.image(image)
 	disp.display()
