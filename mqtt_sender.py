@@ -22,5 +22,5 @@ while True:
 	vals = {"a":random.normalvariate(0,1), "b":random.betavariate(2,3), "t":time.time()}
 	pl = json.dumps(vals)
 	print "Publishing:", pl
-	publish("testing/oled/graphs", payload=pl)
+	client.publish("testing/oled/graphs", payload=pl)
 	time.sleep(1)
