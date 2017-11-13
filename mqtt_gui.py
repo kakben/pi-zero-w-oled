@@ -134,6 +134,8 @@ class Pictureframe:
 		self.height = height
 		if pic is not None:
 			self.set_picure(pic)
+		else:
+			self.picture = None
 
 	@staticmethod
 	def load_image(filepath):
@@ -148,7 +150,8 @@ class Pictureframe:
 
 	def draw(self):
 		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
-		draw.bitmap((self.x+self.pic_xpadding, self.y+self.pic_ypadding), self.picture)
+		if self.picture is not None:
+			draw.bitmap((self.x+self.pic_xpadding, self.y+self.pic_ypadding), self.picture)
 
 class Lineplot:
 	def __init__(self, x, y, width, height, xvals, yvals):
