@@ -19,7 +19,7 @@ client.connect("broker.hivemq.com", 1883, 8000)
 import json
 import random
 while True:
-	vals = {"a":random.normalvariate(0,1), "b":random.betavariate(2,3), "t":time.time()}
+	vals = {"norm":random.normalvariate(0,1), "beta":random.betavariate(2,3), "time":time.time()}
 	pl = json.dumps(vals)
 	print "Publishing:", pl
 	client.publish("testing/oled/graphs", payload=pl)

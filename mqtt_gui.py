@@ -109,6 +109,14 @@ class Window:
 			raise ValueError("Warning: You are adding content but already have subwindows!")
 		self.content = Lineplot(self.x, self.y, self.width, self.height, xvals, yvals)
 
+	def add_pictureframe(self, filepath=None):
+		if self.subwindows is not None:
+			raise ValueError("Warning: You are adding content but already have subwindows!")
+		pic = None
+		if filepath is not None:
+			pic = Pictureframe.load_image(filepath)
+		self.content = Pictureframe(self.x, self.y, self.width, self.height, pic)
+
 	def draw(self):
 		if self.content is None and self.subwindows is None:
 			draw.rectangle((self.x,self.y,self.width,self.height), outline=0, fill=1)
@@ -117,6 +125,30 @@ class Window:
 				subwin.draw()
 		else:
 			self.content.draw()
+
+class Pictureframe:
+	def __init__(self, x, y, width, height, pic=None):
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+		if pic is not None:
+			self.set_picure(pic)
+
+	@staticmethod
+	def load_image(filepath):
+		return Image.open(filepath).convert('1')
+
+	def set_picure(self, pic):
+		if pic.width > self.width or pic.height > self.height:
+			raise ValueError("Picure too large for frame!")
+		self.picture = pic
+		self.pic_xpadding = (self.width-pic.width) / 2
+		self.pic_ypadding = (self.height-pic.height) / 2
+
+	def draw(self):
+		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
+		draw.bitmap((self.x+self.pic_xpadding, self.y+self.pic_ypadding), self.picture)
 
 class Lineplot:
 	def __init__(self, x, y, width, height, xvals, yvals):
@@ -212,7 +244,7 @@ rootwin.subwindows[0].add_lineplot()
 lower_win = rootwin.subwindows[1]
 lower_win.create_subwindows([64], vertical=False)
 lower_win.subwindows[0].add_histogram(bins=20)
-lower_win.subwindows[1].add_histogram(bins=20)
+lower_win.subwindows[1].add_pictureframe()
 
 print lower_win.x, lower_win.y, lower_win.width, lower_win.height
 
@@ -244,12 +276,11 @@ def handle_data(data):
 	print("Data:", data)
 	data = json.loads(data)
 	datalog.append(data)
-	A = [d["a"] for d in datalog]
-	T = [d["t"] for d in datalog]
-	rootwin.subwindows[0].content.set_values(T[-64:], A[-64:])
-	B = [d["b"] for d in datalog]
+	N = [d["norm"] for d in datalog]
+	T = [d["time"] for d in datalog]
+	rootwin.subwindows[0].content.set_values(T[-64:], N[-64:])
+	B = [d["beta"] for d in datalog]
 	lower_win.subwindows[0].content.set_values(A)
-	lower_win.subwindows[1].content.set_values(B)
 	rootwin.draw()
 	disp.image(image)
 	disp.display()
