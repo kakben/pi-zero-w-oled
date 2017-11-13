@@ -115,6 +115,7 @@ class Window:
 		pic = None
 		if filepath is not None:
 			pic = Pictureframe.load_image(filepath, (self.width, self.height))
+		print "here we loaded this:", pic
 		self.content = Pictureframe(self.x, self.y, self.width, self.height, pic)
 
 	def draw(self):
@@ -149,6 +150,7 @@ class Pictureframe:
 		self.pic_ypadding = (self.height-pic.height) / 2
 
 	def draw(self):
+		print "pic is this here:", self.picture
 		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
 		if self.picture is not None:
 			draw.bitmap((self.x+self.pic_xpadding, self.y+self.pic_ypadding), self.picture)
