@@ -139,7 +139,7 @@ class Pictureframe:
 
 	@staticmethod
 	def load_image(filepath):
-		return Image.open(filepath).convert('1')
+		return Image.open(filepath).resize((self.width, self.height),Image.ANTIALIAS).convert('1')
 
 	def set_picure(self, pic):
 		if pic.width > self.width or pic.height > self.height:
@@ -247,7 +247,7 @@ rootwin.subwindows[0].add_lineplot()
 lower_win = rootwin.subwindows[1]
 lower_win.create_subwindows([64], vertical=False)
 lower_win.subwindows[0].add_histogram(bins=20)
-lower_win.subwindows[1].add_pictureframe()
+lower_win.subwindows[1].add_pictureframe("open_door.png")
 
 print lower_win.x, lower_win.y, lower_win.width, lower_win.height
 
