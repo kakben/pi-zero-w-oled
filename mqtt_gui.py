@@ -153,7 +153,8 @@ class Pictureframe:
 		print "pic is this here:", self.picture
 		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
 		if self.picture is not None:
-			draw.bitmap((self.x+self.pic_xpadding, self.y+self.pic_ypadding), self.picture)
+			#draw.bitmap((self.x+self.pic_xpadding, self.y+self.pic_ypadding), self.picture)
+			image.paste(self.picture, box=(self.x+self.pic_xpadding, self.y+self.pic_ypadding))
 
 class Lineplot:
 	def __init__(self, x, y, width, height, xvals, yvals):
