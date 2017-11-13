@@ -114,7 +114,7 @@ class Window:
 			raise ValueError("Warning: You are adding content but already have subwindows!")
 		pic = None
 		if filepath is not None:
-			pic = Pictureframe.load_image(filepath)
+			pic = Pictureframe.load_image(filepath, (self.width, self.height))
 		self.content = Pictureframe(self.x, self.y, self.width, self.height, pic)
 
 	def draw(self):
@@ -138,8 +138,8 @@ class Pictureframe:
 			self.picture = None
 
 	@staticmethod
-	def load_image(filepath):
-		return Image.open(filepath).resize((self.width, self.height),Image.ANTIALIAS).convert('1')
+	def load_image(filepath, size):
+		return Image.open(filepath).resize(size,Image.ANTIALIAS).convert('1')
 
 	def set_picure(self, pic):
 		if pic.width > self.width or pic.height > self.height:
