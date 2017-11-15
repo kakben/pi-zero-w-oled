@@ -1,4 +1,4 @@
 {
-  "broker": "iot.eclipse.org",
+  "broker": "mqtt.swifitch.cz",
   "port": 1773
 }
