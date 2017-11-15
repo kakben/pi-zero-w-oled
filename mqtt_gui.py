@@ -115,7 +115,6 @@ class Window:
 		pic = None
 		if filepath is not None:
 			pic = Pictureframe.load_image(filepath, (self.width, self.height))
-		print "here we loaded this:", pic
 		self.content = Pictureframe(self.x, self.y, self.width, self.height, pic)
 
 	def draw(self):
@@ -150,7 +149,6 @@ class Pictureframe:
 		self.pic_ypadding = (self.height-pic.height) / 2
 
 	def draw(self):
-		print "pic is this here:", self.picture
 		draw.rectangle((self.x,self.y,self.x+self.width-1,self.y+self.height-1), outline=0, fill=0)
 		if self.picture is not None:
 			#draw.bitmap((self.x+self.pic_xpadding, self.y+self.pic_ypadding), self.picture)
@@ -250,7 +248,7 @@ rootwin.subwindows[0].add_lineplot()
 lower_win = rootwin.subwindows[1]
 lower_win.create_subwindows([64], vertical=False)
 lower_win.subwindows[0].add_histogram(bins=20)
-lower_win.subwindows[1].add_pictureframe("open_door.png")
+lower_win.subwindows[1].add_pictureframe("biohazard.jpg")
 
 print lower_win.x, lower_win.y, lower_win.width, lower_win.height
 
