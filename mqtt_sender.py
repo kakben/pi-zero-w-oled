@@ -15,7 +15,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 
 import json
-settings = json.loads(open("settings.json"))
+settings = json.load(open("settings.json"))
 
 client.connect(settings["broker"], settings["port"])
 
