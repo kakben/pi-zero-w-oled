@@ -14,9 +14,11 @@ def on_connect(client, userdata, flags, rc):
 client = mqtt.Client()
 client.on_connect = on_connect
 
-client.connect("broker.hivemq.com", 1883, 8000)
-
 import json
+settings = json.loads(open("settings.json"))
+
+client.connect(settings["broker"], settings["port"])
+
 import random
 while True:
 	vals = {"norm":random.normalvariate(0,1), "beta":random.betavariate(2,3), "time":time.time()}
