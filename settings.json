@@ -1,4 +1,4 @@
 {
-  "broker": "mqtt.swifitch.cz",
+  "broker": "test.mosquitto.org",
   "port": 1773
 }
