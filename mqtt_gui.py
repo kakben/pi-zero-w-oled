@@ -254,8 +254,6 @@ lower_win.create_subwindows([64], vertical=False)
 lower_win.subwindows[0].add_histogram(bins=20)
 lower_win.subwindows[1].add_pictureframe("biohazard.jpg")
 
-print lower_win.x, lower_win.y, lower_win.width, lower_win.height
-
 # Clear initially
 rootwin.draw()
 disp.image(image)
@@ -281,7 +279,7 @@ def show_message(msg):
 import json
 datalog = []
 def handle_data(data):
-	print("Data:", data)
+	print "Data:", data
 	data = json.loads(data)
 	datalog.append(data)
 	N = [d["norm"] for d in datalog]
@@ -320,7 +318,9 @@ client.on_message = on_message
 import json
 settings = json.load(open("settings.json"))
 
+print "Settings", settings
 client.connect(settings["broker"], settings["port"])
+print "Connected"
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
