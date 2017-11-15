@@ -138,8 +138,12 @@ class Pictureframe:
 			self.picture = None
 
 	@staticmethod
-	def load_image(filepath, size):
-		return Image.open(filepath).resize(size,Image.ANTIALIAS).convert('1')
+	def load_image(filepath, size=None):
+		im = Image.open(filepath)
+		if size is not None:
+			return im.resize(size,Image.ANTIALIAS).convert('1')
+		else:
+			return im.convert('1')
 
 	def set_picure(self, pic):
 		if pic.width > self.width or pic.height > self.height:
